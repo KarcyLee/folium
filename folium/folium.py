@@ -81,6 +81,8 @@ class Map(MacroElement):
         - "Cloudmade" (Must pass API key)
         - "Mapbox" (Must pass API key)
         - "CartoDB" (positron and dark_matter)
+        - "Tencent"(腾讯普通地图)
+        - "Gaode" (高德地图)
 
     You can pass a custom tileset to Folium by passing a Leaflet-style
     URL to the tiles parameter: ``http://{s}.yourtiles.com/{z}/{x}/{y}.png``
@@ -217,7 +219,7 @@ $(document).ready(objects_in_front);
 
     def __init__(self, location=None, width='100%', height='100%',
                  left='0%', top='0%', position='relative',
-                 tiles='OpenStreetMap', API_key=None, max_zoom=18, min_zoom=0,
+                 tiles='Tencent', API_key=None, max_zoom=18, min_zoom=0,
                  max_native_zoom=None, zoom_start=10, world_copy_jump=False,
                  no_wrap=False, attr=None, min_lat=-90, max_lat=90,
                  min_lon=-180, max_lon=180, max_bounds=False,
@@ -324,7 +326,7 @@ $(document).ready(objects_in_front);
             return None
         return self._to_png()
 
-    def add_tile_layer(self, tiles='OpenStreetMap', name=None,
+    def add_tile_layer(self, tiles='Tencent', name=None,
                        API_key=None, max_zoom=18, min_zoom=0,
                        max_native_zoom=None, attr=None, active=False,
                        detect_retina=False, no_wrap=False, subdomains='abc',
@@ -333,14 +335,39 @@ $(document).ready(objects_in_front);
         Add a tile layer to the map. See TileLayer for options.
 
         """
-        tile_layer = TileLayer(tiles=tiles, name=name,
-                               min_zoom=min_zoom, max_zoom=max_zoom,
-                               max_native_zoom=max_native_zoom,
-                               attr=attr, API_key=API_key,
-                               detect_retina=detect_retina,
-                               subdomains=subdomains,
-                               no_wrap=no_wrap)
+        if tiles == "Tencent":
+            tile_layer = TileLayer(
+                tiles='http://rt{s}.map.gtimg.com/realtimerender?z={z}&x={x}&y={y}&type=vector&style=0',
+                name=name,
+                min_zoom=min_zoom, max_zoom=max_zoom,
+                max_native_zoom=max_native_zoom,
+                attr="腾讯地图",
+                API_key=API_key,
+                detect_retina=detect_retina,
+                subdomains='0123',
+                no_wrap=no_wrap,
+                tms=True)
+        elif tiles == "Gaode":
+            tile_layer = TileLayer(
+                tiles='http://webrd01.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}',
+                name=name,
+                min_zoom=min_zoom, max_zoom=max_zoom,
+                max_native_zoom=max_native_zoom,
+                attr="高德地图",
+                API_key=API_key,
+                detect_retina=detect_retina,
+                no_wrap=no_wrap)
+        else:
+            tile_layer = TileLayer(tiles=tiles, name=name,
+                                   min_zoom=min_zoom, max_zoom=max_zoom,
+                                   max_native_zoom=max_native_zoom,
+                                   attr=attr, API_key=API_key,
+                                   detect_retina=detect_retina,
+                                   subdomains=subdomains,
+                                   no_wrap=no_wrap)
+
         self.add_child(tile_layer, name=tile_layer.tile_name)
+        return
 
     def render(self, **kwargs):
         """Renders the HTML representation of the element."""

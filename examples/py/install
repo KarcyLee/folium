@@ -1,0 +1,5 @@
+# 安装
+python ./setup.py install --record install.txt
+
+# 删除
+cat install.txt | xargs rm -rf
