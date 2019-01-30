@@ -6,7 +6,7 @@ from __future__ import print_function
 import random
 import folium
 from folium.features import DivIcon
-from folium.plugins import MarkerCluster
+from folium.plugins import MarkerCluster, RotatedMarker, PolylineDecorator
 
 
 def tencent_marker(out_dir="../../out"):
@@ -143,6 +143,32 @@ def tencent_hello(out_dir="../../out"):
     map_osm.save(file_path)
 
 
+def tencent_directed_line(out_dir="../../out"):
+    map_osm = folium.Map(location=[31.32, 120.63], zoom_start=12)
+
+    lines = [
+        ([31.934148404183222, 120.68202165729501], [31.922845454, 120.5965927273]),
+        ([31.967580712626628, 120.55623903023567], [31.91049925, 120.547917])
+    ]
+
+    locs = [[31.387113, 120.929393], [31.364861, 120.609265], [31.226864, 120.511118],
+            [31.269273, 120.750024], [31.264751, 120.598769], [31.299345, 120.742185],
+            ]
+    for loc in locs:
+        # folium.Marker(loc).add_to(map_osm)
+        RotatedMarker(loc, rotation_angle=45
+        ).add_to(map_osm)
+
+    # folium.PolyLine(
+    #     locs,
+    #     fill_color='high',
+    #     fill=True,
+    #     fill_opacity=0.6,
+    #     stroke=False).add_to(map_osm)
+
+    file_path = "{}/tencent_directed_line.html".format(out_dir)
+    map_osm.save(file_path)
+
 if __name__ == "__main__":
     print()
     tencent_marker()
@@ -152,3 +178,4 @@ if __name__ == "__main__":
     tencent_hexagon_with_number()
     gaode_arrow()
     tencent_hello()
+    tencent_directed_line()

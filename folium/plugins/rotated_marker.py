@@ -21,7 +21,7 @@ class RotatedMarker(Marker):
     """
     _template = Template(u"""
             {% macro script(this, kwargs) %}
-                var {{this.get_name()}} = L.boatMarker(
+                var {{this.get_name()}} = L.marker(
                     [{{this.location[0]}},{{this.location[1]}}],
                     {{this.kwargs}}).addTo({{this._parent.get_name()}});
                 {% if this.wind_heading is not none -%}
@@ -43,7 +43,13 @@ class RotatedMarker(Marker):
         self._rotation_angle = rotation_angle
         self._rotation_origin = rotation_origin
 
-        self.kwargs = json.dumps(kwargs)
+        _kwargs = {}
+        _kwargs["rotationAngle"] = rotation_angle
+        _kwargs["rotationOrigin"] = rotation_origin
+        _kwargs.update(kwargs)
+        self.kwargs = json.dumps(_kwargs)
+
+
         return
 
     def render(self, **kwargs):
@@ -54,5 +60,5 @@ class RotatedMarker(Marker):
                                             'if it is not in a Figure.')
 
         figure.header.add_child(
-            JavascriptLink('https://unpkg.com/leaflet.boatmarker/leaflet.boatmarker.min.js'),  # noqa
-            name='markerclusterjs')
+            JavascriptLink('https://cdn.jsdelivr.net/gh/bbecquet/Leaflet.RotatedMarker@0.2.0/leaflet.rotatedMarker.js'),  # noqa
+            name='rotatedmarkerjs')
