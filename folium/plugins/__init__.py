@@ -34,7 +34,7 @@ from folium.plugins.time_slider_choropleth import TimeSliderChoropleth
 from folium.plugins.timestamped_geo_json import TimestampedGeoJson
 from folium.plugins.timestamped_wmstilelayer import TimestampedWmsTileLayers
 from folium.plugins.rotated_marker import RotatedMarker
-from folium.plugins.polyline_decorator import PolylineDecorator
+from folium.plugins.directed_line import DirectedLine
 
 __all__ = [
     'AntPath',
@@ -62,5 +62,5 @@ __all__ = [
     'TimestampedGeoJson',
     'TimestampedWmsTileLayers',
     'RotatedMarker',
-    'PolylineDecorator',
+    'DirectedLine',
     ]
